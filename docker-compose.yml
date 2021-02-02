@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  mongodb:
+    restart: always
+    image: mongo:3.6.3
+    ports:
+      - "27017:27017"
+
+  rabbitmq:
+   restart: always
+   image: rabbitmq:latest
+   ports:
+     - "5672:5672"
+
+  scraper:
+    build: ./scraper
+    command: bash -c "cd ./scraper && python3 manage.py makemigrations wave_scraper && python3 manage.py migrate && celery -A wave_proj  worker -l INFO --detach --logfile=./celery.log && python3 manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      - mongodb
+      - rabbitmq      
+    links:
+      - mongodb
+      - rabbitmq      

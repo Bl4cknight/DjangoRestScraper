@@ -1,0 +1,6 @@
+scraper/venv/
+scraper/.idea/
+scraper/wave_proj/wave_scraper/migrations/
+*.pyc
+*.pyo
+*.log

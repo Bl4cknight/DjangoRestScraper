@@ -1,0 +1,8 @@
+django==3
+djangorestframework
+djongo
+django-filter
+drf-yasg 
+requests-html
+celery
+sqlparse==0.2.4

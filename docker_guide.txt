@@ -1,0 +1,32 @@
+# before build on local machine be sure following services are down:
+sudo service apache2 stop
+sudo service rabbitmq-server stop
+sudo systemctl stop mongodb 
+pkill -9 -f 'celery'
+
+#start docker
+sudo service docker start
+
+# from services directory run:
+sudo docker-compose up --build
+
+# Access application at:
+http://127.0.0.1:8000/
+
+# Documentation at:
+http://127.0.0.1:8000/swagger/
+
+# check status of services and logs:
+sudo docker ps
+sudo docker logs container_id
+
+#create super user and run api test container_id va sostituito con l'id dell'image services_scraper:
+# Nota: il test che riguarda celery non agisce sul db di test ma effettua lo scraper della
+# prima pagina del blog e carica 2 articoli sul db principale
+sudo docker ps
+sudo docker exec -it container_id python3 ./scraper/manage.py createsuperuser
+sudo docker exec -it container_id python3 ./scraper/manage.py test wave_proj.wave_scraper.tests
+
+
+# Stop services:
+sudo docker-compose down
